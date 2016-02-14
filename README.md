@@ -1,7 +1,7 @@
 
 # EPICS AD Drivers & Plugins
 
-A driver from APS Detector Group
+A driver from APS Detector Group 
 
 ## PCO Driver
 The PCO driver was commissioned by Imaging Group at APS/XSD (i.e., 2-BM, https://www1.aps.anl.gov/imaging) for the PCO Edge and Dimax camera which are used for X-ray Micro-tomography. It has been extensively been tested at 2-BM by Xianghui Xiao and Tim Madden. This driver has been developed using the low-level Camera Link libraries. It currently runs on Windows, but we are working to port the driver to linux. (Note: It was developed before PCO released their Windows-based SDK.) We are currently working to merge this driver into the official EPICS AreaDetector repo. 
@@ -24,7 +24,6 @@ http://www.aps.anl.gov/epics/modules/soft/asyn/R3-1/asynDriver.html#drvAsynSeria
 
 The camera link serial code is located in: camLinkSerialSrc
 
-
 ### PCO Camera Driver
 The PCO camera driver in PCO2Src has all the serial port control code for the PCO Dimax and PCO Edge cameras. To build:
 1. make in cameraLinkSrc
@@ -32,8 +31,7 @@ The PCO camera driver in PCO2Src has all the serial port control code for the PC
 3. make in pluginSrc
 4. make in PCO2src
 
-
 ## Plugins
-
 ### Edge Camera Plugin
 The PCO Edge camera sends scrambled images that need to be descrambled. This plugin handles this. If the camera runs faster than the plugin, then images will be stored in the NDArray queues.
+
