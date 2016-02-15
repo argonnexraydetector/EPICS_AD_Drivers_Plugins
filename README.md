@@ -7,9 +7,9 @@ A driver from APS Detector Group
 The PCO driver was commissioned by Imaging Group at APS/XSD (i.e., 2-BM, https://www1.aps.anl.gov/imaging) for the PCO Edge and Dimax camera which are used for X-ray Micro-tomography. It has been extensively been tested at 2-BM by Xianghui Xiao and Tim Madden. This driver has been developed using the low-level Camera Link libraries. It currently runs on Windows, but we are working to port the driver to linux. (Note: It was developed before PCO released their Windows-based SDK.) We are currently working to merge this driver into the official EPICS AreaDetector repo. 
 
 The PCO Driver has three parts:
-1. Camera Link driver for Area Detector (cameraLinkSrc2)
-2. Camera Link serial port (camLinkSerialSrc)
-3. PCO camera source (PCO2src)
+  1. Camera Link driver for Area Detector (cameraLinkSrc2)
+  2. Camera Link serial port (camLinkSerialSrc)
+  3. PCO camera source (PCO2src)
 
 ### Camera Link Driver 
 Camera Link has two parts: a serial port for camera control, and a high speed data link for image data. The Camera Link driver is a class ADCameraLink, which inherits ADDriver, and adds functions to interface to any camera link card. There are special class for the silicon software MEIV grabber and Dalsa/Coreco grabbers. Editing the makefile sets which grabber is being used. 
@@ -26,10 +26,10 @@ The camera link serial code is located in: camLinkSerialSrc
 
 ### PCO Camera Driver
 The PCO camera driver in PCO2Src has all the serial port control code for the PCO Dimax and PCO Edge cameras. To build:
-1. Make in cameraLinkSrc
-2. Make in camLinkSerialSrc
-3. Make in pluginSrc
-4. Make in PCO2src
+  1. Make in cameraLinkSrc
+  2. Make in camLinkSerialSrc
+  3. Make in pluginSrc
+  4. Make in PCO2src
 
 ## Plugins
 ### Edge Camera Plugin
