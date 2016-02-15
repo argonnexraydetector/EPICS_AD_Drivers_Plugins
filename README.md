@@ -26,10 +26,10 @@ The camera link serial code is located in: camLinkSerialSrc
 
 ### PCO Camera Driver
 The PCO camera driver in PCO2Src has all the serial port control code for the PCO Dimax and PCO Edge cameras. To build:
-1. make in cameraLinkSrc
-2. make in camLinkSerialSrc
-3. make in pluginSrc
-4. make in PCO2src
+1. Make in cameraLinkSrc
+2. Make in camLinkSerialSrc
+3. Make in pluginSrc
+4. Make in PCO2src
 
 ## Plugins
 ### Edge Camera Plugin
