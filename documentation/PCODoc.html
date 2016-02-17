@@ -1,0 +1,647 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>areaDetector PCO driver</title>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type" />
+</head>
+<body>
+  <div style="text-align: center">
+    <h1>
+      areaDetector PCO driver</h1>
+    <h2>
+      February 2016</h2>
+    <h2>Timothy Madden, Argonne National Laboratory</h2>
+  </div>
+  <h2>
+    Table of Contents</h2>
+  <ul>
+    <li><a href="#Introduction">Introduction</a></li>
+    <li><a href="#StandardNotes">Implementation of standard driver parameters</a></li>
+    <li><a href="#Driver_parameters">PCO specific parameters</a></li>
+    <li><a href="#Unsupported">Unsupported standard driver parameters</a></li>
+    <li><a href="#Usage">Usage</a></li>
+    <li><a href="#Configuration">Configuration</a></li>
+    <li><a href="#Performance">Performance</a></li>
+    <li><a href="#MEDM_screen">MEDM screen</a></li>
+    <li><a href="#Restrictions">Restrictions</a> </li>
+  </ul>
+  <h2 id="Introduction" style="text-align: left">
+    Introduction</h2>
+  <p>
+    This is an <a href="http://www.aps.anl.gov/epics">EPICS</a> <a href="areaDetector.html">
+      areaDetector</a> driver for sCMOS detectors from <a href="http://www.pco.de/scmos-cameras/"> PCO </a>. 
+      It has been tested on the PCO Edge and Dimax camera (add specific models).The
+    driver is supported 32-bit and 64-bit Windows (???)  and linux (???). </p>
+    <p>
+This PCO driver was commissioned by <a href="https://www1.aps.anl.gov/imaging">Imaging Group</a> at APS/XSD 
+for X-ray Micro-tomography application. It has been extensively been tested at APS 2-BM by Xianghui Xiao 
+and Tim Madden. This driver has been developed using the low-level Camera Link libraries. 
+It currently runs on Windows (XX-bit ???) , but we are working to port the driver to linux. 
+(Note: It was developed before PCO released their Windows-based SDK. An EPICS driver based on the PCO SDK was 
+developed by the <a href="http://controls.diamond.ac.uk/downloads/support/pcocam2/">Diamond Controls group</a>.)</p>
+  <p>
+    The driver provides access to essentially all of the features of the PCO
+    cameras:</p>
+  <ul>
+    <li>bla bla bla</li>
+    <li>more bla bla</li>
+  </ul>
+  <p>
+    This driver inherits from <a href="areaDetectorDoc.html#ADDriver">ADDriver</a>.
+    It implements many of the parameters in <a href="areaDetectorDoxygenHTML/asyn_n_d_array_driver_8h.html">
+      asynNDArrayDriver.h</a> and in <a href="areaDetectorDoxygenHTML/_a_d_driver_8h.html">
+        ADArrayDriver.h</a>. It also implements a number of parameters that are specific
+    to the PCO detectors. </p>
+  <ul>
+    <li>bla:
+      <ul>
+        <li>bla?</li>
+      </ul>
+    </li>
+    <li>more bla 
+      <ul>
+        <li>bla </li>
+        <li>bla </li>
+        <li>more bla
+          <ul>
+            <li>more bla</li>
+            <li>more bla</li>
+            <li>more bla</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+  <p>
+    more... how enum menus are built, etc. 
+ 
+    </p>
+  <h2 id="StandardNotes" style="text-align: left">
+    Implementation of standard driver parameters</h2>
+  <p>
+    The following table describes how the PCO driver implements some of the standard
+    driver parameters ... <b>Needs editing... these are just placeholders</b>
+  </p>
+  <table border="1" cellpadding="2" cellspacing="2" style="text-align: left">
+    <tbody>
+      <tr>
+        <td align="center" colspan="3">
+          <b>Implementation of Parameters in asynNDArrayDriver.h and ADDriver.h, and EPICS Record
+            Definitions in ADBase.template and NDFile.template</b></td>
+      </tr>
+      <tr>
+        <th>
+          Parameter index variable</th>
+        <th>
+          EPICS record name</th>
+        <th>
+          Description</th>
+      </tr>
+      <tr>
+        <td>
+          ADTriggerMode</td>
+        <td>
+          $(P)$(R)TriggerMode<br />
+          $(P)$(R)TriggerMode_RBV</td>
+        <td>
+          Sets the trigger mode for the detector. Options for the Neo are:
+          <ul>
+            <li>Internal</li>
+            <li>Software</li>
+            <li>External</li>
+            <li>External Start</li>
+            <li>External Exposure</li>
+            <li>Advanced</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          ADImageMode</td>
+        <td>
+          $(P)$(R)ImageMode<br />
+          $(P)$(R)ImageMode_RBV</td>
+        <td>
+          Sets the image mode for the detector. Options are:
+          <ul>
+            <li>Fixed</li>
+            <li>Continuous</li>
+          </ul>
+          Fixed counts collects NumImages images, continuous acquires continuously until acquisition
+          is stopped. </td>
+      </tr>
+      <tr>
+        <td>
+          ADNumExposures</td>
+        <td>
+          $(P)$(R)NumExposures<br />
+          $(P)$(R)NumExposures_RBV</td>
+        <td>
+          Sets the number of accumulations per image.</td>
+      </tr>
+      <tr>
+        <td>
+          ADNumImages</td>
+        <td>
+          $(P)$(R)NumImages<br />
+          $(P)$(R)NumImages_RBV</td>
+        <td>
+          Sets the number of images to take when ImageMode=Fixed.</td>
+      </tr>
+      <tr>
+        <td>
+          ADAcquirePeriod</td>
+        <td>
+          $(P)$(R)AcquirePeriod<br />
+          $(P)$(R)AcquirePeriod_RBV</td>
+        <td>
+          Sets the FrameRate (=1./AcquirePeriod). The FrameRate can also be set directly.
+          The minimum AcquirePeriod (maximum FrameRate) depends on a number of other parameters,
+          including the A3Binning, SizeX, SizeY, ReadoutRate, A3ShutterMode, PixelEncoding,
+          and Overlap.</td>
+      </tr>
+      <tr>
+        <td>
+          NDDataType</td>
+        <td>
+          $(P)$(R)DataType<br />
+          $(P)$(R)DataType_RBV</td>
+        <td>
+          The data type for the image data. Allowed values are:
+          <ul>
+            <li>UInt16</li>
+            <li>UInt32</li>
+          </ul>
+          The DataType is selected automatically, based upon the PixelEncoding record. The
+          data type will be UInt32 if PixelEncoding is Mono32, and UInt16 for all other values
+          of PixelEncoding. PixelEncoding=Mono32 can be used when A3Binning &gt; 1x1, or when
+          multiple accumulations (NumExposures &gt; 1) could cause 16-bit overflow. </td>
+      </tr>
+      <tr>
+        <td>
+          ADTemperature</td>
+        <td>
+          $(P)$(R)Temperature<br />
+          $(P)$(R)Temperature_RBV</td>
+        <td>
+          Sets the setpoint temperature of the camera.</td>
+      </tr>
+      <tr>
+        <td>
+          ADTemperatureActual</td>
+        <td>
+          $(P)$(R)TemperatureActual</td>
+        <td>
+          Reads the actual temperature of the camera.</td>
+      </tr>
+    </tbody>
+  </table>
+  <h2 id="Driver_parameters" style="text-align: left">
+    PCO specific parameters</h2>
+  <p>
+    The PCO driver implements the following parameters in addition to those in asynNDArrayDriver.h
+    and ADDriver.h. <b>Needs editing... these are just placeholders.. template comes from the QImaging driver...</b>
+  </p>
+  <table border="1" cellpadding="2" cellspacing="2" style="text-align: left">
+    <tbody>
+      <tr>
+        <td align="center" colspan="7">
+          <b>Parameter Definitions in PCO.h and EPICS Record Definitions in pco.template</b>
+        </td>
+      </tr>
+      <tr>
+        <th>
+          Parameter index variable</th>
+        <th>
+          asyn interface</th>
+        <th>
+          Access</th>
+        <th>
+          Description</th>
+        <th>
+          drvInfo string</th>
+        <th>
+          EPICS record name</th>
+        <th>
+          EPICS record type</th>
+      </tr>
+      <tr>
+        <td align="center" colspan="7">
+          <b>Version information</b> </td>
+      </tr>
+      <tr>
+        <td>
+            qSerialNumberRBVString</td>
+        <td>
+          asynOctet</td>
+        <td>
+          R/O</td>
+        <td>
+          Camera serial number</td>
+        <td>
+          SERIAL_NUMBER_RBV</td>
+        <td>
+          SerialNumber</td>
+        <td>
+          stringin</td>
+      </tr>
+      <tr>
+        <td>
+            qMaxBitDepthRBVString</td>
+        <td>
+            asynInt32</td>
+        <td>
+          R/O</td>
+        <td>
+          Max bit depth</td>
+        <td>
+          MAX_BIT_DEPTH_RBV</td>
+        <td>
+          MaxBitDepth</td>
+        <td>
+          stringin</td>
+      </tr>
+      <tr>
+        <td>
+            qUniqueIdRBVString</td>
+        <td>
+          asynOctet</td>
+        <td>
+          R/O</td>
+        <td>
+          Unique ID</td>
+        <td>
+            UNIQUE_ID_RBV</td>
+        <td>
+          UniqueId</td>
+        <td>
+          stringin</td>
+      </tr>
+      <tr>
+        <td>
+            qCcdTypeRBVString</td>
+        <td>
+          asynOctet</td>
+        <td>
+          R/O</td>
+        <td>
+          CCD Type</td>
+        <td>
+            CCD_TYPE_RBV</td>
+        <td>
+          CCDType</td>
+        <td>
+          stringin</td>
+      </tr>
+      <tr>
+        <td align="center" colspan="7">
+          <b>Cooling control and status</b> </td>
+      </tr>
+      <tr>
+        <td>
+            qCooledRBVString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/W</td>
+        <td>
+          Turn the sensor cooler on and off</td>
+        <td>
+            COOLED_RBV</td>
+        <td>
+          Cooled<br />
+          Cooled_RBV</td>
+        <td>
+          bo<br />
+          bi</td>
+      </tr>
+      <tr>
+        <td>
+            qRegulatedCoolingRBVString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/O</td>
+        <td>
+          Regulated cooling
+        </td>
+        <td>
+            REGULATED_COOLING_RBV</td>
+        <td>
+          RegulatedCooling_RBV</td>
+        <td>
+            bo<br />
+            bi</td>
+      </tr>
+      <tr>
+        <td>
+            qFanControlRBVString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/W</td>
+        <td>
+         Fan Control
+        </td>
+        <td>
+            FAN_CONTROL_RBV</td>
+        <td>
+         FanControl</td>
+        <td>
+          mbbo<br />
+          mbbi</td>
+      </tr>
+      <tr>
+        <td>
+            qHighSensitivityModeRBVString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/W</td>
+        <td>
+          High sensitivity mode
+        </td>
+        <td>
+            HIGH_SENSITIVITY_MODE_RBV</td>
+        <td>
+          HighSensitivityMode_RBV</td>
+        <td>
+          mbbo<br />
+          mbbi</td>
+      </tr>
+      <tr>
+        <td align="center" colspan="7">
+          <b>Readout control and status</b> </td>
+      </tr>
+      <tr>
+        <td>
+            qBlackoutModeRBVString</td>
+        <td>
+            asynOctet</td>
+        <td>
+          R/O</td>
+        <td>
+          Blackout mode
+           </td>
+        <td>
+            BLACK_OUT_MODE_RBV</td>
+        <td>
+          BlackOutMode_RBV</td>
+        <td>
+         stringin
+        </td>
+      </tr>
+      <tr>
+        <td>
+            qAsymmetricalBinningRBVString</td>
+        <td>
+          asynFloat64</td>
+        <td>
+          R/W</td>
+        <td>
+          
+        </td>
+        <td>
+            ASYMMETRICAL_BINNING_RBV</td>
+        <td>
+          AsymetricalBinning_RBV</td>
+        <td>
+          ao<br />
+          ai</td>
+      </tr>
+      <tr>
+        <td>
+            qCoolerActiveString</td>
+        <td>
+          asynFloat64</td>
+        <td>
+          R/O</td>
+        <td>
+          
+         </td>
+        <td>
+            COOLER_ACTIVE</td>
+        <td>
+          CoolerActive</td>
+        <td>
+          ai</td>
+      </tr>
+      <tr>
+        <td>
+            qReadoutSpeedString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/W</td>
+        <td>
+          
+        </td>
+        <td>
+            READOUT_SPEED</td>
+        <td>
+          ReadoutSpeed<br />
+          ReadoutSpeed_RBV</td>
+        <td>
+          mbbo<br />
+          mbbi</td>
+      </tr>
+      <tr>
+        <td>
+            qOffsetString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/W</td>
+        <td>
+          
+         </td>
+        <td>
+            OFFSET</td>
+        <td>
+          Offset<br />
+          Offset_RBV</td>
+        <td>
+          mbbo<br />
+          mbbi</td>
+      </tr>
+      <tr>
+        <td>
+            PCOimageFormatString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/W</td>
+        <td>
+          
+        </td>
+        <td>
+            IMAGE_FORMAT</td>
+        <td>
+          ImageFormat<br />
+          ImageFormat_RBV</td>
+        <td>
+          mbbo<br />
+          mbbi</td>
+      </tr>
+      <tr>
+        <td>
+            qAcquireTimeRBVString</td>
+        <td>
+          asynFloat64</td>
+        <td>
+          R/O</td>
+        <td>
+          
+        </td>
+        <td>
+            ACQUIRE_TIME_RBV</td>
+        <td>
+          AquireTime_RBV</td>
+        <td>
+          ai</td>
+      </tr>
+      <tr>
+        <td>
+            qMinXRBVString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/W</td>
+        <td>
+          
+         </td>
+        <td>
+            MIN_X_RBV</td>
+        <td>
+          MinX_RBV</td>
+        <td>
+          bo<br />
+          bi</td>
+      </tr>
+      <tr>
+        <td>
+            qMinYRBVString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/W</td>
+        <td>
+          
+         </td>
+        <td>
+            MIN_Y_RBV</td>
+        <td>
+          MinY_RBV</td>
+        <td>
+          bo<br />
+          bi</td>
+      </tr>
+      <tr>
+        <td align="center" colspan="7">
+          <b>Trigger control</b> </td>
+      </tr>
+      <tr>
+        <td>
+            qSizeXRBVString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/W</td>
+        <td>
+          
+        </td>
+        <td>
+            SIZE_X_RBV</td>
+        <td>
+          SizeX_RBV</td>
+        <td>
+          bo</td>
+      </tr>
+      <tr>
+        <td align="center" colspan="7">
+          <b>Area-Of-Interest (AOI) Control</b> </td>
+      </tr>
+      <tr>
+        <td>
+            qSizeYRBVString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/O</td>
+        <td>
+          
+        </td>
+        <td>
+            SIZE_Y_RBV</td>
+        <td>
+            SizeY_RBV</td>
+        <td>
+          bi</td>
+      </tr>
+      <tr>
+        <td>
+            qTriggerModeRBVString</td>
+        <td>
+          asynInt32</td>
+        <td>
+          R/W</td>
+        <td>
+          
+        </td>
+        <td>
+            TRIGGER_MODE_RBV</td>
+        <td>
+            TriggerMode_RBV
+        </td>
+        <td>
+          mbbo<br />
+          mbbi</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <h2 id="Usage" style="text-align: left">
+    Usage</h2>
+  <p>
+    more words...
+  </p>
+
+
+  <h2 id="Configuration">
+    Configuration</h2>
+  <p>
+    The PCO driver is created with the PCOConfig command, either from C/C++ or
+    from the EPICS IOC shell.</p>
+  <pre>int PCOConfig(const char *portName, int cameraId,
+                int maxBuffers, size_t maxMemory,
+                int priority, int stackSize, int maxFrames)
+  </pre>
+  
+  <h2 id="Performance" style="text-align: left">
+    Performance</h2>
+  <p>
+    more words on speed...
+  </p>
+
+  <h2 id="MEDM_screen" style="text-align: left">
+    MEDM screen</h2>
+  <p>
+    The following shows the MEDM screen that is used to control the PCO Edge and Dimax detectors.
+   </p>
+  <p>
+    <code>pco_base.adl</code> is the main screen used to control the PCO driver.
+  </p>
+  <div style="text-align: center">
+    <h3 style="text-align: center">
+      pco_base.adl</h3>
+      <img alt="PCO_MEDM.png" src="PCO_MEDM.png" /></div>
+  
+  <h2 id="Restrictions" style="text-align: left">
+    Restrictions</h2>
+  <p>
+    more words on what does not work or limitations or known bugs...
+  </p>
+
+</body>
+</html>
